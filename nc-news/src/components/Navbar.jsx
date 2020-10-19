@@ -15,7 +15,6 @@ export default class Navbar extends Component {
 		axios
 			.get('https://nc-news-fe-jonp.herokuapp.com/api/topics')
 			.then(({ data: { topics } }) => {
-				console.log('topics', { topics });
 				this.setState({
 					topics,
 					isLoading: false,
@@ -26,7 +25,9 @@ export default class Navbar extends Component {
 	};
 
 	dropDownFunc = (event) => {
-
+		event.preventDefault()
+		if (this.state.dropdown === 'hide') this.setState({ dropdown: '' })
+		if (this.state.dropdown === '') this.setState({ dropdown: 'hide' })
 	}
 
 	loginBtn = (event) => {
@@ -42,12 +43,14 @@ export default class Navbar extends Component {
 				<p>New</p>
 				<p>Popular</p>
 				<div className="dropdown">
-					<button onClick={this.dropDownFunc} className="dropbtn">Topics</button>
+					<p onClick={this.dropDownFunc} className="dropbtn">Topics</p>
 					<div id="myDropdown" className="dropdown-content">
-						{topics.map((topic) => {
-							return <Link className="topics-navbar-list" to={`/articles/${topic.slug}`}
-								key={topic.slug}>{topic.slug}</Link>
-						})}
+						<ul className={this.state.dropdown}>
+							{topics.map((topic) => {
+								return <li className="topics-navbar-list" key={topic.slug}><Link to={`/articles/${topic.slug}`} className="topics-navbar-list"
+								>{topic.slug}</Link></li>
+							})}
+						</ul>
 					</div>
 				</div>
 				<button className='login-btn' onClick={this.loginBtn}>Login</button>

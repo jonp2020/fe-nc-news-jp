@@ -1,8 +1,11 @@
 import React from 'react'
+import { Link } from '@reach/router';
+
 
 const Home = () => {
 
 	const enterSite = (event) => {
+		event.preventDefault()
 
 	}
 
@@ -14,7 +17,7 @@ const Home = () => {
 				<h2>Post comments and join the conversation</h2>
 			</div>
 			<div>
-				<button className="enter-site-btn" onClick={enterSite}>Enter</button>
+				<button className="enter-site-btn"><Link className="enter-site-btn" to={'/articles'}>Enter site</Link></button>
 			</div>
 		</section >
 	)
