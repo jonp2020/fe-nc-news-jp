@@ -20,7 +20,7 @@ export default class Navbar extends Component {
 					isLoading: false,
 				});
 			}).then(() => {
-				console.log('state', this.state);
+				// console.log('state', this.state);
 			})
 	};
 

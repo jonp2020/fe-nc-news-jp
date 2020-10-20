@@ -16,7 +16,7 @@ export default class Articles extends Component {
 			.then((res) => {
 				this.setState({ articles: res.data.articles, isLoading: false });
 			}).then(() => {
-				console.log('article state ', this.state);
+				// console.log('article state ', this.state);
 			})
 	}
 

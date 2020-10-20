@@ -109,3 +109,36 @@ h1 {
 h2 {
 	font-size: 1.6em;
 }
+/* .main-section {
+	display: grid;
+	grid-template-columns: 10px 1fr 10px;
+} */
+
+.article-title {
+	margin: 0;
+}
+
+/* .article-card {
+	display: grid;
+	grid-template-columns: 1fr 20px;
+	grid-template-rows: 1fr 2fr 1fr;
+	grid-template-areas: 
+	"article-title article-votes"
+	"article-body article-votes"
+	"article-date article-read-more";
+	border: 1px solid black;
+
+} */
+
+.article-votes {
+	display: inline-block;
+	padding: 0.5em;
+	border: 1px solid #000;
+	border-radius: 8px;
+	background-color: #E5E5E5;
+	font-weight: bold;
+}
+
+.article-votes-btn {
+	font-size: 1.2em;
+}
