@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Router } from '@reach/router';
 import axios from 'axios'
+import ArticleCard from '../components/ArticleCard'
 
 
 
@@ -23,7 +24,9 @@ export default class Articles extends Component {
 		if (this.state.isLoading) return <p>Fetching articles</p>
 		return (
 			<section className="main-section">
-				ARTICLES HERE
+				{this.state.articles.map((article) => {
+					return <ArticleCard key={article.article_id} article={article} />
+				})}
 			</section>
 		)
 	}
