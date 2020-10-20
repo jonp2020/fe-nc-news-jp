@@ -4,10 +4,10 @@ import { Link } from '@reach/router';
 
 const Home = () => {
 
-	const enterSite = (event) => {
-		event.preventDefault()
+	// const enterSite = (event) => {
+	// 	event.preventDefault()
 
-	}
+	// }
 
 	return (
 		<section>
