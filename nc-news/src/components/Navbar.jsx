@@ -43,15 +43,14 @@ export default class Navbar extends Component {
 				<p>New</p>
 				<p>Popular</p>
 				<div className="dropdown">
-					<p onClick={this.dropDownFunc} className="dropbtn">Topics</p>
-					<div id="myDropdown" className="dropdown-content">
-						<ul className={this.state.dropdown}>
-							{topics.map((topic) => {
-								return <li className="topics-navbar-list" key={topic.slug}><Link to={`/articles/${topic.slug}`} className="topics-navbar-list"
-								>{topic.slug}</Link></li>
-							})}
-						</ul>
-					</div>
+					<p onClick={this.dropDownFunc} className="dropbtn dropdown-content">Topics</p>
+
+					<ul className={this.state.dropdown}>
+						{topics.map((topic) => {
+							return <li className="topics-navbar-list" key={topic.slug}><Link to={`/articles/${topic.slug}`} className="topics-navbar-list"
+							>{topic.slug}</Link></li>
+						})}
+					</ul>
 				</div>
 				<button className='login-btn' onClick={this.loginBtn}>Login</button>
 			</nav>

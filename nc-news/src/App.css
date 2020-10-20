@@ -23,11 +23,19 @@
 	height: 50px;
 }
 
+.dropdown {
+	position: relative;
+	display: inline-block;
+}
+
+
+
 .dropbtn {
 	background-color: #FCBF49;
 	border: none;
 	font-size: 1em;
 	font-weight: bold;
+	display: show;
 }
 
 .topics-navbar-list {
@@ -44,6 +52,7 @@ li.topics-navbar-list {
 }
 
 ul {
+	position: absolute;
 	text-decoration: none;
 	padding: 0;
 }
