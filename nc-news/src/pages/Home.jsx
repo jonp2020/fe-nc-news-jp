@@ -4,12 +4,8 @@ import { Link } from '@reach/router';
 
 const Home = () => {
 
-	// const enterSite = (event) => {
-	// 	event.preventDefault()
-
-	// }
-
 	return (
+
 		<section>
 			<div className="welcome-page">
 				<h1>Welcome to NC News</h1>
@@ -19,7 +15,7 @@ const Home = () => {
 			<div>
 				<button className="enter-site-btn"><Link className="enter-site-btn" to={'/articles'}>Enter site</Link></button>
 			</div>
-		</section >
+		</section>
 	)
 }
 

@@ -12,6 +12,7 @@ export default class Navbar extends Component {
 
 
 	componentDidMount = () => {
+		// console.log('mount', this.props);
 		axios
 			.get('https://nc-news-fe-jonp.herokuapp.com/api/topics')
 			.then(({ data: { topics } }) => {
@@ -30,18 +31,29 @@ export default class Navbar extends Component {
 		if (this.state.dropdown === '') this.setState({ dropdown: 'hide' })
 	}
 
-	loginBtn = (event) => {
+
+	linkToArticles = (event) => {
+		const value = event.target.value
+		this.props.updateArticlesOnDisplay(value)
+	}
+
+	linkToTopics = (event) => {
+		const value = event.target.value
+
+		console.log('nav event', event);
+		this.props.updateTopics(value)
 
 	}
 
 
-
 	render() {
+
 		const { topics } = this.state
 		return (
 			<nav className="nav-bar">
-				<p>New</p>
-				<p>Popular</p>
+				{/* <Link to={`/articles/?order`}><button onClick={this.linkToArticles} value="?order">Latest news</button></Link> */}
+				<button onClick={this.linkToArticles} value="?order">Latest news</button>
+				<button onClick={this.linkToArticles} value="?sort_by=comment_count">Most commented</button>
 				<div className="dropdown">
 					<p onClick={this.dropDownFunc} className="dropbtn dropdown-content">Topics</p>
 
@@ -53,7 +65,7 @@ export default class Navbar extends Component {
 					</ul>
 				</div>
 				<button className='login-btn' onClick={this.loginBtn}>Login</button>
-			</nav>
+			</nav >
 		)
 	}
 }
