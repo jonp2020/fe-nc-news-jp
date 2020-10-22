@@ -8,11 +8,11 @@ export default class Navbar extends Component {
 		topics: [],
 		// dropdown: 'hide',
 		isLoading: true,
-		query: ''
+		query: '',
+		loggedInStatus: false
 	}
 
 	componentDidMount = () => {
-		// console.log('mount', this.props);
 		axios
 			.get('https://nc-news-fe-jonp.herokuapp.com/api/topics')
 			.then(({ data: { topics } }) => {
@@ -21,44 +21,27 @@ export default class Navbar extends Component {
 					isLoading: false,
 				});
 			}).then(() => {
-				// console.log('state', this.state);
 			})
 	};
 
-	// dropDownFunc = (event) => {
-	// 	event.preventDefault()
-	// 	if (this.state.dropdown === 'hide') this.setState({ dropdown: '' })
-	// 	if (this.state.dropdown === '') this.setState({ dropdown: 'hide' })
-	// }
-
-	// linkToArticles = (event) => {
-	// 	const value = event.target.value
-	// 	this.props.updateArticlesOnDisplay(value)
-	// }
-
-	// linkToTopics = (event) => {
-	// 	const value = event.target.value
-	// 	this.props.updateTopics(value)
-	// }
-
-	updateQueryState = (newQuery) => {
-		newQuery.preventDefault()
-		console.log('newQuery', newQuery);
-		this.setState({ query: newQuery })
-		console.log('navbar', this.state);
+	logInOutBtn = (event) => {
+		event.preventDefault()
+		this.setState((prevState) => {
+			return { loggedInStatus: !prevState.loggedInStatus }
+		})
 	}
+
+	// updateQueryState = (newQuery) => {
+	// 	newQuery.preventDefault()
+	// 	console.log('newQuery', newQuery);
+	// 	this.setState({ query: newQuery })
+	// 	console.log('navbar', this.state);
+	// }
 
 	render() {
 		const { topics } = this.state
 		return (
 			<nav className="nav-bar">
-				{/* <Link to={`/articles/${this.state.query}`}><button onClick={() => this.updateQueryState('?order')}>Latest news</button></Link>
-				{/* <button onClick={this.linkToArticles} value="?order">Latest news</button> */}
-				{/* <Link to={`/articles/${this.state.query}`}>
-					<button onClick={() => this.updateQueryState('?sort_by=comment_count')}>Most commented</button>
-				</Link> */}
-				{/* <p onClick={this.dropDownFunc} className="dropbtn dropdown-content">Topics</p> */}
-
 				<ul className="topics-nav-menu">
 					<li className="topics-navbar-list"><Link className="topics-navbar-list" to={`/articles`}>Front Page</Link> </li>
 					{topics.map((topic) => {
@@ -66,9 +49,17 @@ export default class Navbar extends Component {
 						>{topic.slug}</Link></li>
 					})}
 				</ul>
+				{
+					!this.state.loggedInStatus ? <button className='login-btn' onClick={this.logInOutBtn} value='login'>Login</button> :
+						<div>
+							<p>Logged in as NewUser</p>
+							<button className='logout-btn' onClick={this.logInOutBtn} value='logout'>Logout</button>
+						</div>
+				}
 
-				<button className='login-btn' onClick={this.loginBtn}>Login</button>
-			</nav >
+
+
+			</nav>
 		)
 	}
 }

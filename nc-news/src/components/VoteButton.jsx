@@ -1,30 +1,36 @@
-import Axios from 'axios'
 import React, { Component } from 'react'
 import axios from 'axios'
 
 
 export default class VoteButton extends Component {
 	state = {
-		votes: this.props.votes,
-		articleId: this.props.articleId
+		voteCount: 0
 	}
 
-	handleVote = (value) => {
-		const updatedVoteCount = this.state.votes + value
-		this.setState({ votes: updatedVoteCount })
-		axios.patch(`https://nc-news-fe-jonp.herokuapp.com/api/articles/${this.state.articleId}`,
-			{ inc_votes: value })
+	handleVote = (voteValue) => {
+		this.setState((currentState) => {
+			return { voteCount: currentState.voteCount + voteValue }
+		})
+		const { articleId } = this.props
+		console.log(articleId, 'articleId');
+		console.log('current state', this.state);
+
+
+		axios.patch(`https://nc-news-fe-jonp.herokuapp.com/api/articles/${articleId}`,
+			{ inc_votes: voteValue }).catch((err) => {
+				this.setState((currentState) => {
+					return { voteCount: currentState.voteCount - voteValue }
+				})
+			})
 	}
-
-
 
 	render() {
 		return (
-			<div className="article-votes">
-				<button onClick={() => { this.handleVote(1) }} className="article-votes-btn" > +</button>
-				<p>{this.props.votes}</p>
-				<button onClick={() => { this.handleVote(-1) }} className="article-votes-btn">-</button>
-			</div >
+			<div className="article-votes" >
+				<button onClick={() => { this.handleVote(1) }} className="article-votes-btn" >+</button>
+				<p>{this.props.votes + this.state.voteCount}</p>
+				<button onClick={() => { this.handleVote(-1) }} value={-1} className="article-votes-btn">-</button>
+			</div>
 		)
 	}
 }

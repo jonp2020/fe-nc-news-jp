@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import CommentsCard from '../components/CommentsCard'
-import Navbar from '../components/Navbar'
+import VoteButton from '../components/VoteButton'
+import CommentsBox from '../components/CommentsBox'
 
 
 class Article extends Component {
@@ -12,8 +13,6 @@ class Article extends Component {
 	}
 
 	componentDidMount = () => {
-		const { topic } = this.props
-		console.log('article props', this.props);
 		axios.get(`https://nc-news-fe-jonp.herokuapp.com/api/articles/${this.props.article_id}`).then((res) => {
 			this.setState({ article: res.data.article })
 		}).then(() => {
@@ -29,7 +28,6 @@ class Article extends Component {
 		if (this.state.isLoading) return <p>Getting you the article</p>
 		const updatedDate = new Date(this.state.article.created_at)
 		const updatedTime = this.state.article.created_at.slice(11, 16)
-		console.log('single article props', this.props);
 		return (
 			<div>
 				<article className='article-card'>
@@ -37,13 +35,10 @@ class Article extends Component {
 					<p className="article-date">Posted by {this.state.article.author} on {updatedDate.toDateString()} at {updatedTime}</p>
 					<p className="article-body">{this.state.article.body}</p>
 					<p>{this.state.article.comment_count} Comments</p>
+					<VoteButton votes={this.state.article.votes} articleId={this.state.article.article_id} />
 
-					<div className="article-votes">
-						<button className="article-votes-btn">+</button>
-						<p>{this.state.article.votes}</p>
-						<button className="article-votes-btn">-</button>
-					</div>
-					<button>Add Comment</button>
+					<CommentsBox comments={this.state.comments} articleId={this.state.article.article_id} />
+
 				</article>
 				<div className="comments-section">
 					{this.state.comments.map((comment) => {
