@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import CommentsCard from '../components/CommentsCard'
+import Navbar from '../components/Navbar'
 
 
 class Article extends Component {
@@ -11,6 +12,8 @@ class Article extends Component {
 	}
 
 	componentDidMount = () => {
+		const { topic } = this.props
+		console.log('article props', this.props);
 		axios.get(`https://nc-news-fe-jonp.herokuapp.com/api/articles/${this.props.article_id}`).then((res) => {
 			this.setState({ article: res.data.article })
 		}).then(() => {
@@ -23,9 +26,10 @@ class Article extends Component {
 	}
 
 	render() {
-		if (this.state.isLoading) return <p>Getting your the article</p>
+		if (this.state.isLoading) return <p>Getting you the article</p>
 		const updatedDate = new Date(this.state.article.created_at)
 		const updatedTime = this.state.article.created_at.slice(11, 16)
+		console.log('single article props', this.props);
 		return (
 			<div>
 				<article className='article-card'>

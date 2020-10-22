@@ -1,5 +1,7 @@
 import React from 'react'
 import { Link } from '@reach/router';
+import VoteButton from './VoteButton';
+
 
 
 const ArticleCard = (props) => {
@@ -20,11 +22,7 @@ const ArticleCard = (props) => {
 			<Link to={`/articles/${newArticle.article_id}`}>
 				<p className="article-read-more">Read more...</p>
 			</Link>
-			<div className="article-votes">
-				<button className="article-votes-btn">+</button>
-				<p>{props.article.votes}</p>
-				<button className="article-votes-btn">-</button>
-			</div>
+			<VoteButton votes={props.article.votes} articleId={props.article.article_id} />
 		</article>
 	)
 }
