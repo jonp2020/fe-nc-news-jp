@@ -1,3 +1,8 @@
+* {
+	margin: 0;
+	padding: 0;
+	}
+
 .App {
   text-align: center;
 }
@@ -23,43 +28,29 @@
 	height: 50px;
 }
 
-.dropdown {
-	position: relative;
-	display: inline-block;
+.topic-article-heading {
+padding: 1em 0em;
 }
 
-
-
-.dropbtn {
-	background-color: #FCBF49;
-	border: none;
-	font-size: 1em;
-	font-weight: bold;
-	display: show;
+.topics-nav-menu {
+	display: flex;
+	justify-content: center;
 }
 
 .topics-navbar-list {
+	display: inline;
+	margin: 2em;
 	text-decoration: none;
 	list-style-type: none;
 	padding: 5px;
 	background-color: #FCBF49;
 	color: #000;
-	font-weight: normal;
+	font-weight: bold;
 }
 
-li.topics-navbar-list {
-	border: 1px solid #000
+.topics-navbar-list::first-letter {
+  text-transform: uppercase;
 }
-
-ul {
-	position: absolute;
-	text-decoration: none;
-	padding: 0;
-}
-
-ul.hide {
-	display: none;
-} 
 
 .login-btn {
 	text-decoration: none;
@@ -71,10 +62,6 @@ ul.hide {
 	padding: 10px;
 	border-radius: 12px;
 }
-
-/* ul.show {
-
-} */
 
 .central-area {
 	height: 1000px;
@@ -109,26 +96,17 @@ h1 {
 h2 {
 	font-size: 1.6em;
 }
-/* .main-section {
-	display: grid;
-	grid-template-columns: 10px 1fr 10px;
-} */
+
+.main-section {
+}
 
 .article-title {
 	margin: 0;
 }
 
-/* .article-card {
-	display: grid;
-	grid-template-columns: 1fr 20px;
-	grid-template-rows: 1fr 2fr 1fr;
-	grid-template-areas: 
-	"article-title article-votes"
-	"article-body article-votes"
-	"article-date article-read-more";
-	border: 1px solid black;
-
-} */
+.article-card {
+ padding: 1em;
+}
 
 .article-votes {
 	display: inline-block;
