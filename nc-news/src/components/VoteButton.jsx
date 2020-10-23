@@ -11,12 +11,10 @@ export default class VoteButton extends Component {
 		this.setState((currentState) => {
 			return { voteCount: currentState.voteCount + voteValue }
 		})
-		const { articleId } = this.props
-		console.log(articleId, 'articleId');
-		console.log('current state', this.state);
 
+		const { articlesOrComments, idNum } = this.props
 
-		axios.patch(`https://nc-news-fe-jonp.herokuapp.com/api/articles/${articleId}`,
+		axios.patch(`https://nc-news-fe-jonp.herokuapp.com/api/${articlesOrComments}/${idNum}`,
 			{ inc_votes: voteValue }).catch((err) => {
 				this.setState((currentState) => {
 					return { voteCount: currentState.voteCount - voteValue }
@@ -27,9 +25,9 @@ export default class VoteButton extends Component {
 	render() {
 		return (
 			<div className="article-votes" >
-				<button onClick={() => { this.handleVote(1) }} className="article-votes-btn" >+</button>
+				<button disabled={this.state.voteCount === 1} onClick={() => { this.handleVote(1) }} className="article-votes-btn" >+</button>
 				<p>{this.props.votes + this.state.voteCount}</p>
-				<button onClick={() => { this.handleVote(-1) }} value={-1} className="article-votes-btn">-</button>
+				<button disabled={this.state.voteCount === -1} onClick={() => { this.handleVote(-1) }} value={-1} className="article-votes-btn">-</button>
 			</div>
 		)
 	}

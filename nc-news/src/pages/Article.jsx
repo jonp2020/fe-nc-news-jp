@@ -5,6 +5,7 @@ import VoteButton from '../components/VoteButton'
 import CommentsBox from '../components/CommentsBox'
 
 
+
 class Article extends Component {
 	state = {
 		article: {},
@@ -28,6 +29,7 @@ class Article extends Component {
 		if (this.state.isLoading) return <p>Getting you the article</p>
 		const updatedDate = new Date(this.state.article.created_at)
 		const updatedTime = this.state.article.created_at.slice(11, 16)
+
 		return (
 			<div>
 				<article className='article-card'>
@@ -35,17 +37,15 @@ class Article extends Component {
 					<p className="article-date">Posted by {this.state.article.author} on {updatedDate.toDateString()} at {updatedTime}</p>
 					<p className="article-body">{this.state.article.body}</p>
 					<p>{this.state.article.comment_count} Comments</p>
-					<VoteButton votes={this.state.article.votes} articleId={this.state.article.article_id} />
-
-					<CommentsBox comments={this.state.comments} articleId={this.state.article.article_id} />
-
+					<VoteButton votes={this.state.article.votes} idNum={this.state.article.article_id} articlesOrComments="articles" />
 				</article>
+				<CommentsBox loggedInStatus={this.props.loggedInStatus} username={this.props.username} articleId={this.state.article.article_id} />
 				<div className="comments-section">
 					{this.state.comments.map((comment) => {
 						return <CommentsCard key={comment.comment_id} comment={comment} />
 					})}
-
 				</div>
+
 			</div>
 
 		)

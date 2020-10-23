@@ -1,11 +1,27 @@
 * {
 	margin: 0;
 	padding: 0;
+	font-family: 'Roboto', sans-serif;;
 	}
 
 .App {
   text-align: center;
 }
+
+.nc-logo {
+	font-family: 'Monoton', cursive;
+
+	text-decoration: none;
+	color: white;
+}	
+
+.nc-logo-first-letters {
+	font-family: 'Monoton', cursive;
+	font-size: 1.5em;
+	text-decoration: none;
+	color: white;
+}
+
 
 .header {
 	height: 150px;
@@ -52,6 +68,17 @@ padding: 1em 0em;
   text-transform: uppercase;
 }
 
+.login-bar {
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+}
+
+.logged-in-text {
+	position: relative;
+	font-size: 1em;
+}
+
 .login-btn {
 	text-decoration: none;
 	font-size: 1em;
@@ -60,6 +87,21 @@ padding: 1em 0em;
 	background-color: #EE964B;
 	border: none;
 	padding: 10px;
+	margin: 0 10px 0 0;
+	border-radius: 12px;
+}
+
+.logout-btn {
+	position: relative;
+
+	text-decoration: none;
+	font-size: 1em;
+	font-weight: bold;
+	color: #000;
+	background-color: #EE964B;
+	border: none;
+	padding: 10px;
+	margin: 0 10px 0 0;
 	border-radius: 12px;
 }
 
@@ -72,6 +114,11 @@ padding: 1em 0em;
 	height: 100px;
 	background-color: #F95738;
 	color: #FFF;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	font-weight: bold;
 }
 
 .welcome-page {
