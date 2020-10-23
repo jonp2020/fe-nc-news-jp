@@ -21,6 +21,10 @@ export default class Navbar extends Component {
 			})
 	};
 
+	// updateSortBy = (change) => {
+
+	// }
+
 	render() {
 		const { topics } = this.state
 		return (

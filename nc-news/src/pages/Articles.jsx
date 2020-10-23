@@ -6,9 +6,9 @@ import ArticleCard from '../components/ArticleCard'
 export default class Articles extends Component {
 	state = {
 		articles: [],
-		articlesToDisplay: '',
 		isLoading: true,
-		sortBy: ""
+		sort_by: "",
+		order: ""
 	}
 
 	componentDidMount = () => {
@@ -21,20 +21,20 @@ export default class Articles extends Component {
 			})
 	}
 
-	updateArticlesOnDisplay = (value) => {
-		const display = value
-		this.setState({ articlesToDisplay: display })
-	}
+	// updateArticlesOnDisplay = (value) => {
+	// 	const display = value
+	// 	this.setState({ articlesToDisplay: display })
+	// }
 
 	componentDidUpdate = (prevProps, prevState) => {
 		const { topic } = this.props
 		const { articlesToDisplay } = this.state
-		const { sortBy } = this.state
-		if (prevState.articlesToDisplay !== this.state.articlesToDisplay || prevProps.topic !== this.props.topic || prevState.sortBy !== this.state.sortBy) {
+		const { sort_by, order } = this.state
+		if (prevState.articlesToDisplay !== this.state.articlesToDisplay || prevProps.topic !== this.props.topic || prevState.sort_by !== this.state.sort_by || prevState.order !== this.state.order) {
 			console.log('here in mount update');
 			axios
 				.get(`https://nc-news-fe-jonp.herokuapp.com/api/articles/`, {
-					params: { topic, articlesToDisplay, sortBy }
+					params: { topic, articlesToDisplay, sort_by, order }
 				})
 				.then((res) => {
 					this.setState({ articles: res.data.articles })
@@ -43,22 +43,25 @@ export default class Articles extends Component {
 	}
 
 	sortArticles = (event) => {
-		event.preventDefault()
-		const sortByValue = event.target.value;
-		this.setState({ sortBy: sortByValue })
+		if (event.target.value === "votes" || event.target.value === 'comment_count') {
+			const sortByValue = event.target.value;
+			this.setState({ sort_by: sortByValue, order: "" })
+		} else {
+			const sortByValue = event.target.value;
+			this.setState({ order: sortByValue, sort_by: "" })
+		}
 	}
 
 	render() {
-		console.log('articles state', this.state);
 		if (this.state.isLoading) return <p>Fetching articles</p>
 		return (
 			<div>
 				{!this.props.topic ? <h1 className='topic-article-heading'>All Articles</h1> : <h1 className='topic-article-heading'>{this.state.articles[0].topic[0].toUpperCase() + this.state.articles[0].topic.substr(1)}</h1>}
 				<div className="sortBtn-area">
-					<button value="sort_by=created_at?order=asc" className="sortBtn-btn" onClick={this.sortArticles}>Latest</button>
-					<button value="sort_by=created_at?order=desc" className="sortBtn-btn" onClick={this.sortArticles}>Oldest</button>
-					<button value="sort_by=comment_count" className="sortBtn-btn" onClick={this.sortArticles}>Most commented</button>
-					<button value="sort_by=votes" className="sortBtn-btn" onClick={this.sortArticles}>Most votes</button>
+					<button value="desc" className="sortBtn-btn" onClick={this.sortArticles}>Latest</button>
+					<button value="asc" className="sortBtn-btn" onClick={this.sortArticles}>Oldest</button>
+					<button value="comment_count" className="sortBtn-btn" onClick={this.sortArticles}>Most commented</button>
+					<button value="votes" className="sortBtn-btn" onClick={this.sortArticles}>Most votes</button>
 
 				</div>
 				<section className="main-section">
