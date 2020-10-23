@@ -2,8 +2,6 @@ import React from 'react'
 import { Link } from '@reach/router';
 import VoteButton from './VoteButton';
 
-
-
 const ArticleCard = (props) => {
 	// console.log('props ', props);
 	const newArticle = { ...props.article }

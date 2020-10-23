@@ -25,6 +25,27 @@ class Article extends Component {
 		})
 	}
 
+	componentDidUpdate = (prevProps, prevState) => {
+		if (prevState.block !== this.state.block) {
+			axios.get(`https://nc-news-fe-jonp.herokuapp.com/api/articles/${this.props.article_id}`).then((res) => {
+				this.setState({ article: res.data.article })
+			}).then(() => {
+				axios.get(`https://nc-news-fe-jonp.herokuapp.com/api/articles/${this.props.article_id}/comments`).then((res) => {
+					this.setState({ comments: res.data.comments, isLoading: false })
+				})
+			}).catch((err) => {
+				return err
+			})
+		}
+	}
+
+	addComments = (newComment) => {
+		console.log('addcomments', newComment);
+		this.setState((currentState) => {
+			return { comments: [newComment.comment, ...currentState.comments] }
+		})
+	}
+
 	render() {
 		if (this.state.isLoading) return <p>Getting you the article</p>
 		const updatedDate = new Date(this.state.article.created_at)
@@ -39,12 +60,14 @@ class Article extends Component {
 					<p>{this.state.article.comment_count} Comments</p>
 					<VoteButton votes={this.state.article.votes} idNum={this.state.article.article_id} articlesOrComments="articles" />
 				</article>
-				<CommentsBox loggedInStatus={this.props.loggedInStatus} username={this.props.username} articleId={this.state.article.article_id} />
+				<CommentsBox loggedInStatus={this.props.loggedInStatus} username={this.props.username} articleId={this.state.article.article_id} addComments={this.addComments} />
 				<div className="comments-section">
 					{this.state.comments.map((comment) => {
 						return <CommentsCard key={comment.comment_id} comment={comment} />
 					})}
 				</div>
+
+
 
 			</div>
 

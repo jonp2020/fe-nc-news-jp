@@ -29,14 +29,14 @@ export default class App extends Component {
 						!this.state.loggedInStatus ? <button className='login-btn' onClick={this.logInOutBtn} value='login'>Login</button> :
 							<div className="login-bar">
 								<button className='logout-btn' onClick={this.logInOutBtn} value='logout'>Logout</button>
-								<p className="logged-in-text">Logged in as <strong><em>NewUser99</em></strong></p>
+								<p className="logged-in-text">Logged in as <strong><em>jessjelly</em></strong></p>
 							</div>
 					}
 				</div>
 				<Header />
 				<Navbar />
 				<div className="central-area">
-					<Router>
+					<Router primary={false}>
 						<Home path="/" />
 						<Articles loggedInStatus={this.state.loggedInStatus} username={this.state.username} path="/articles" />
 						<Article loggedInStatus={this.state.loggedInStatus} username={this.state.username} path="/articles/:article_id" />

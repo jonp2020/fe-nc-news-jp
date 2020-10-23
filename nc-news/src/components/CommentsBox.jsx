@@ -7,9 +7,6 @@ export default class CommentsBox extends Component {
 	}
 
 	handleChange = (event) => {
-		console.log('handlechange comment state', this.state);
-		console.log('handlechange comment props', this.props);
-
 		const text = event.target.value
 		this.setState((currentState) => {
 			return { commentsText: text }
@@ -18,20 +15,28 @@ export default class CommentsBox extends Component {
 
 	handleSubmit = (event) => {
 		event.preventDefault()
-		console.log('submit btn', event);
-		axios.post(`https://nc-news-fe-jonp.herokuapp.com/api/articles/${this.props.articleId}/comments`, {
-			body: this.state.commentsText,
-			username: this.props.username
-		}).then((res) => {
-			console.log('commentBox res', res);
-		})
+		let { articleId, username } = this.props;
+		if (username.length === 0) username = 'jessjelly'
+		axios.post(
+			`https://nc-news-fe-jonp.herokuapp.com/api/articles/${articleId}/comments`,
+			{
+				body: this.state.commentsText,
+				username: username,
+			})
+			.then((res) => {
+				this.setState({ commentsText: '' })
+
+				this.props.addComments(res.data)
+			}).catch((err) => {
+				console.log('err', err);
+			})
 	}
 
 	render() {
 		return (
 			<div className="comments-box">
-				<textarea onChange={this.handleChange}></textarea>
-				<button onSubmit={this.handleSubmit} className="comments-btn">Add Comment</button>
+				<textarea value={this.state.commentsText} onChange={this.handleChange}></textarea>
+				<button onClick={this.handleSubmit} className="comments-btn">Add Comment</button>
 			</div>
 
 		)
