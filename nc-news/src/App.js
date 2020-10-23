@@ -17,7 +17,7 @@ export default class App extends Component {
 	logInOutBtn = (event) => {
 		event.preventDefault()
 		this.setState((prevState) => {
-			return prevState.loggedInStatus === false ? { loggedInStatus: true, username: 'NewUser99' } : { loggedInStatus: false, username: '' }
+			return prevState.loggedInStatus === false ? { loggedInStatus: true, username: 'jessjelly' } : { loggedInStatus: false, username: '' }
 		})
 	}
 

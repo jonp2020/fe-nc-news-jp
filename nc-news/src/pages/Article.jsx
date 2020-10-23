@@ -24,7 +24,7 @@ class Article extends Component {
 	}
 
 	componentDidUpdate = (prevProps, prevState) => {
-		if (prevState.block !== this.state.block) {
+		if (prevState.block !== this.state.block || prevState.comments !== this.state.comments) {
 			axios.get(`https://nc-news-fe-jonp.herokuapp.com/api/articles/${this.props.article_id}`).then((res) => {
 				this.setState({ article: res.data.article })
 			}).then(() => {
@@ -40,6 +40,15 @@ class Article extends Component {
 	addComments = (newComment) => {
 		this.setState((currentState) => {
 			return { comments: [newComment.comment, ...currentState.comments] }
+		})
+	}
+
+	deleteComments = (deletedCommentId) => {
+		this.setState((prevState) => {
+			const updatedComments = prevState.comments.filter((comment) => {
+				return comment.comment_id !== deletedCommentId
+			})
+			return { comments: updatedComments }
 		})
 	}
 
@@ -60,7 +69,7 @@ class Article extends Component {
 				<CommentsBox loggedInStatus={this.props.loggedInStatus} username={this.props.username} articleId={this.state.article.article_id} addComments={this.addComments} />
 				<div className="comments-section">
 					{this.state.comments.map((comment) => {
-						return <CommentsCard key={comment.comment_id} comment={comment} />
+						return <CommentsCard username={this.props.username} key={comment.comment_id} comment={comment} deleteComments={this.deleteComments} />
 					})}
 				</div>
 			</div>
