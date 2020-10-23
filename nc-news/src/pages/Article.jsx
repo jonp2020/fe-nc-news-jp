@@ -4,8 +4,6 @@ import CommentsCard from '../components/CommentsCard'
 import VoteButton from '../components/VoteButton'
 import CommentsBox from '../components/CommentsBox'
 
-
-
 class Article extends Component {
 	state = {
 		article: {},
@@ -40,7 +38,6 @@ class Article extends Component {
 	}
 
 	addComments = (newComment) => {
-		console.log('addcomments', newComment);
 		this.setState((currentState) => {
 			return { comments: [newComment.comment, ...currentState.comments] }
 		})
@@ -66,11 +63,7 @@ class Article extends Component {
 						return <CommentsCard key={comment.comment_id} comment={comment} />
 					})}
 				</div>
-
-
-
 			</div>
-
 		)
 	}
 }
