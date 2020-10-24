@@ -8,7 +8,8 @@ export default class Articles extends Component {
 		articles: [],
 		isLoading: true,
 		sort_by: "",
-		order: ""
+		order: "",
+		page: 1
 	}
 
 	componentDidMount = () => {
@@ -21,20 +22,13 @@ export default class Articles extends Component {
 			})
 	}
 
-	// updateArticlesOnDisplay = (value) => {
-	// 	const display = value
-	// 	this.setState({ articlesToDisplay: display })
-	// }
-
 	componentDidUpdate = (prevProps, prevState) => {
 		const { topic } = this.props
-		const { articlesToDisplay } = this.state
 		const { sort_by, order } = this.state
-		if (prevState.articlesToDisplay !== this.state.articlesToDisplay || prevProps.topic !== this.props.topic || prevState.sort_by !== this.state.sort_by || prevState.order !== this.state.order) {
-			console.log('here in mount update');
+		if (prevProps.topic !== this.props.topic || prevState.sort_by !== this.state.sort_by || prevState.order !== this.state.order) {
 			axios
 				.get(`https://nc-news-fe-jonp.herokuapp.com/api/articles/`, {
-					params: { topic, articlesToDisplay, sort_by, order }
+					params: { topic, sort_by, order }
 				})
 				.then((res) => {
 					this.setState({ articles: res.data.articles })
@@ -52,7 +46,14 @@ export default class Articles extends Component {
 		}
 	}
 
+	setPage = (newPage) => {
+		this.setState({ page: newPage })
+		console.log(this.state.page);
+
+	}
+
 	render() {
+		console.log('rendering in many articles');
 		if (this.state.isLoading) return <p>Fetching articles</p>
 		return (
 			<div>
@@ -68,6 +69,11 @@ export default class Articles extends Component {
 					{this.state.articles.map((article) => {
 						return <ArticleCard key={article.article_id} article={article} />
 					})}
+				</section>
+				<section className="pagination-container">
+					<button className="paginate-btn" onClick={() => this.setPage(this.state.page - 1)}>{'<'}</button>
+					<button className="paginate-btn">Page {this.state.page}</button>
+					<button className="paginate-btn" onClick={() => this.setPage(this.state.page + 1)}> {'>'}</button>
 				</section>
 			</div>
 		)

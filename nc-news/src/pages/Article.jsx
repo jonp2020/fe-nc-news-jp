@@ -8,7 +8,9 @@ class Article extends Component {
 	state = {
 		article: {},
 		isLoading: true,
-		comments: {}
+		comments: {},
+		addedAComment: 0,
+		deletedAComment: 0
 	}
 
 	componentDidMount = () => {
@@ -24,7 +26,7 @@ class Article extends Component {
 	}
 
 	componentDidUpdate = (prevProps, prevState) => {
-		if (prevState.block !== this.state.block || prevState.comments !== this.state.comments) {
+		if (prevState.addedAComment !== this.state.addedAComment || prevState.deletedAComment !== this.state.deletedAComment) {
 			axios.get(`https://nc-news-fe-jonp.herokuapp.com/api/articles/${this.props.article_id}`).then((res) => {
 				this.setState({ article: res.data.article })
 			}).then(() => {
@@ -38,8 +40,8 @@ class Article extends Component {
 	}
 
 	addComments = (newComment) => {
-		this.setState((currentState) => {
-			return { comments: [newComment.comment, ...currentState.comments] }
+		this.setState((prevState) => {
+			return { comments: [newComment.comment, ...prevState.comments], addedAComment: prevState.addedAComment + 1 }
 		})
 	}
 
@@ -48,7 +50,7 @@ class Article extends Component {
 			const updatedComments = prevState.comments.filter((comment) => {
 				return comment.comment_id !== deletedCommentId
 			})
-			return { comments: updatedComments }
+			return { comments: updatedComments, deletedAComment: prevState.deletedAComment + 1 }
 		})
 	}
 

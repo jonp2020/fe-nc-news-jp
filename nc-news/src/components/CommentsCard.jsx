@@ -8,11 +8,9 @@ class CommentsCard extends Component {
 	}
 
 	handleChange = (event) => {
-		// console.log('comments card delete props', this.props);
 		const commentId = this.props.comment.comment_id
 
 		axios.delete(`https://nc-news-fe-jonp.herokuapp.com/api/comments/${commentId}`).then((res) => {
-			console.log('delete comment', res.data);
 			this.props.deleteComments(commentId)
 		})
 	}
