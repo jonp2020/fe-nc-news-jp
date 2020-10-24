@@ -36,7 +36,7 @@ export default class CommentsBox extends Component {
 		return (
 			<div className="comments-box">
 				<textarea value={this.state.commentsText} onChange={this.handleChange}></textarea>
-				<button onClick={this.handleSubmit} className="comments-btn">Add Comment</button>
+				<button disabled={this.state.commentsText.length === 0} onClick={this.handleSubmit} className="comments-btn">Add Comment</button>
 			</div>
 
 		)
