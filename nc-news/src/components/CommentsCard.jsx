@@ -3,9 +3,7 @@ import VoteButton from './VoteButton'
 import axios from 'axios'
 
 class CommentsCard extends Component {
-	state = {
 
-	}
 
 	handleChange = (event) => {
 		const commentId = this.props.comment.comment_id

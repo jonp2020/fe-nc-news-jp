@@ -3,6 +3,7 @@ import axios from 'axios'
 import CommentsCard from '../components/CommentsCard'
 import VoteButton from '../components/VoteButton'
 import CommentsBox from '../components/CommentsBox'
+import Pagination from '../components/Pagination'
 
 class Article extends Component {
 	state = {
@@ -10,7 +11,9 @@ class Article extends Component {
 		isLoading: true,
 		comments: {},
 		addedAComment: 0,
-		deletedAComment: 0
+		deletedAComment: 0,
+		page: 1,
+		resultsPerPage: 5
 	}
 
 	componentDidMount = () => {
@@ -54,12 +57,21 @@ class Article extends Component {
 		})
 	}
 
+	setPage = (newPage) => {
+		this.setState({ page: newPage })
+	}
+
 	render() {
 		if (this.state.isLoading) return <p>Getting you the article</p>
 		const updatedDate = new Date(this.state.article.created_at)
 		const updatedTime = this.state.article.created_at.slice(11, 16)
 
+		const indexOfLastComment = this.state.page * this.state.resultsPerPage
+		const indexOfFirstComment = indexOfLastComment - this.state.resultsPerPage
+		const currentComments = this.state.comments.slice(indexOfFirstComment, indexOfLastComment)
+
 		return (
+
 			<div>
 				<article className='article-card'>
 					<h3 className="article-title">{this.state.article.title}</h3>
@@ -70,10 +82,11 @@ class Article extends Component {
 				</article>
 				<CommentsBox loggedInStatus={this.props.loggedInStatus} username={this.props.username} articleId={this.state.article.article_id} addComments={this.addComments} />
 				<div className="comments-section">
-					{this.state.comments.map((comment) => {
+					{currentComments.map((comment) => {
 						return <CommentsCard username={this.props.username} key={comment.comment_id} comment={comment} deleteComments={this.deleteComments} />
 					})}
 				</div>
+				<Pagination totalPosts={this.state.comments.length} setPage={this.setPage} page={this.state.page} resultsPerPage={this.state.resultsPerPage} />
 			</div>
 		)
 	}

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import ArticleCard from '../components/ArticleCard'
+import Pagination from '../components/Pagination'
 // import Navbar from '../components/Navbar'
 
 export default class Articles extends Component {
@@ -9,7 +10,8 @@ export default class Articles extends Component {
 		isLoading: true,
 		sort_by: "",
 		order: "",
-		page: 1
+		page: 1,
+		resultsPerPage: 5
 	}
 
 	componentDidMount = () => {
@@ -24,8 +26,8 @@ export default class Articles extends Component {
 
 	componentDidUpdate = (prevProps, prevState) => {
 		const { topic } = this.props
-		const { sort_by, order } = this.state
-		if (prevProps.topic !== this.props.topic || prevState.sort_by !== this.state.sort_by || prevState.order !== this.state.order) {
+		const { sort_by, order, page } = this.state
+		if (prevProps.topic !== topic || prevState.sort_by !== sort_by || prevState.order !== order || prevState.page !== page) {
 			axios
 				.get(`https://nc-news-fe-jonp.herokuapp.com/api/articles/`, {
 					params: { topic, sort_by, order }
@@ -53,7 +55,13 @@ export default class Articles extends Component {
 	}
 
 	render() {
+
 		console.log('rendering in many articles');
+
+		const indexOfLastArticle = this.state.page * this.state.resultsPerPage
+		const indexOfFirstArticle = indexOfLastArticle - this.state.resultsPerPage
+		const currentArticles = this.state.articles.slice(indexOfFirstArticle, indexOfLastArticle)
+
 		if (this.state.isLoading) return <p>Fetching articles</p>
 		return (
 			<div>
@@ -66,15 +74,11 @@ export default class Articles extends Component {
 
 				</div>
 				<section className="main-section">
-					{this.state.articles.map((article) => {
+					{currentArticles.map((article) => {
 						return <ArticleCard key={article.article_id} article={article} />
 					})}
 				</section>
-				<section className="pagination-container">
-					<button className="paginate-btn" onClick={() => this.setPage(this.state.page - 1)}>{'<'}</button>
-					<button className="paginate-btn">Page {this.state.page}</button>
-					<button className="paginate-btn" onClick={() => this.setPage(this.state.page + 1)}> {'>'}</button>
-				</section>
+				<Pagination totalPosts={this.state.articles.length} setPage={this.setPage} page={this.state.page} resultsPerPage={this.state.resultsPerPage} />
 			</div>
 		)
 	}
