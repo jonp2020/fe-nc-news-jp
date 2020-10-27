@@ -16,6 +16,7 @@ export default class VoteButton extends Component {
 
 		axios.patch(`https://nc-news-fe-jonp.herokuapp.com/api/${articlesOrComments}/${idNum}`,
 			{ inc_votes: voteValue }).catch((err) => {
+				console.log('votes patch err', err);
 				this.setState((currentState) => {
 					return { voteCount: currentState.voteCount - voteValue }
 				})

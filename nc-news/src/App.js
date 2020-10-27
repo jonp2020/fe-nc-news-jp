@@ -7,6 +7,8 @@ import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Articles from './pages/Articles';
 import Article from './pages/Article';
+import Author from './pages/Author'
+import ErrorDisplay from './components/ErrorDisplay';
 
 export default class App extends Component {
 	state = {
@@ -37,10 +39,13 @@ export default class App extends Component {
 				<Navbar />
 				<div className="central-area">
 					<Router primary={false}>
+
 						<Home path="/" />
 						<Articles loggedInStatus={this.state.loggedInStatus} username={this.state.username} path="/articles" />
 						<Article loggedInStatus={this.state.loggedInStatus} username={this.state.username} path="/articles/:article_id" />
 						<Articles loggedInStatus={this.state.loggedInStatus} username={this.state.username} path="/topics/:topic" />
+						<Author path="/author/:author" />
+						<ErrorDisplay path="/*" />
 					</Router>
 				</div>
 				<Footer />

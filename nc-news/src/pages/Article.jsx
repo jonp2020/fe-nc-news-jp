@@ -4,6 +4,7 @@ import CommentsCard from '../components/CommentsCard'
 import VoteButton from '../components/VoteButton'
 import CommentsBox from '../components/CommentsBox'
 import Pagination from '../components/Pagination'
+import ErrorDisplay from '../components/ErrorDisplay'
 
 class Article extends Component {
 	state = {
@@ -13,31 +14,45 @@ class Article extends Component {
 		addedAComment: 0,
 		deletedAComment: 0,
 		page: 1,
-		resultsPerPage: 5
+		resultsPerPage: 5,
+		error: false
 	}
 
 	componentDidMount = () => {
+		// this.setState({ isLoading: true })
 		axios.get(`https://nc-news-fe-jonp.herokuapp.com/api/articles/${this.props.article_id}`).then((res) => {
 			this.setState({ article: res.data.article })
 		}).then(() => {
 			axios.get(`https://nc-news-fe-jonp.herokuapp.com/api/articles/${this.props.article_id}/comments`).then((res) => {
 				this.setState({ comments: res.data.comments, isLoading: false })
 			})
-		}).catch((err) => {
-			return err
+		}).catch(({ response }) => {
+			console.log('single article did mount err', response);
+			this.setState({
+				error: {
+					status: response.status,
+					message: response.data.msg
+				}
+			})
 		})
 	}
 
 	componentDidUpdate = (prevProps, prevState) => {
-		if (prevState.addedAComment !== this.state.addedAComment || prevState.deletedAComment !== this.state.deletedAComment) {
+		if (prevState.addedAComment !== this.state.addedAComment || prevState.deletedAComment !== this.state.deletedAComment || prevState.page !== this.state.page) {
 			axios.get(`https://nc-news-fe-jonp.herokuapp.com/api/articles/${this.props.article_id}`).then((res) => {
 				this.setState({ article: res.data.article })
 			}).then(() => {
 				axios.get(`https://nc-news-fe-jonp.herokuapp.com/api/articles/${this.props.article_id}/comments`).then((res) => {
 					this.setState({ comments: res.data.comments, isLoading: false })
 				})
-			}).catch((err) => {
-				return err
+			}).catch(({ response }) => {
+				console.log('single article did update err', response);
+				this.setState({
+					error: {
+						status: response.status,
+						message: response.data.msg
+					}
+				})
 			})
 		}
 	}
@@ -62,6 +77,8 @@ class Article extends Component {
 	}
 
 	render() {
+		const { error } = this.state
+		if (error) return <ErrorDisplay {...error} />
 		if (this.state.isLoading) return <p>Getting you the article</p>
 		const updatedDate = new Date(this.state.article.created_at)
 		const updatedTime = this.state.article.created_at.slice(11, 16)

@@ -3,11 +3,11 @@ import axios from 'axios'
 import ArticleCard from '../components/ArticleCard'
 import Pagination from '../components/Pagination'
 import ErrorDisplay from '../components/ErrorDisplay'
-// import Navbar from '../components/Navbar'
 
-export default class Articles extends Component {
+class Author extends Component {
 	state = {
 		articles: [],
+		articlesByAuthor: [],
 		isLoading: true,
 		sort_by: "",
 		order: "",
@@ -24,7 +24,13 @@ export default class Articles extends Component {
 			params: { topic }
 		})
 			.then((res) => {
-				this.setState({ articles: res.data.articles, isLoading: false });
+				this.setState({ articles: res.data.articles });
+			}).then(() => {
+				const { articles } = this.state
+				const authorArticles = articles.filter((article) => {
+					return article.author === this.props.author
+				})
+				this.setState({ articlesByAuthor: authorArticles, isLoading: false })
 			})
 			.catch(({ response }) => {
 				console.log('articles did mount err', response)
@@ -38,9 +44,6 @@ export default class Articles extends Component {
 	}
 
 	componentDidUpdate = (prevProps, prevState) => {
-		console.log('here in articles did update')
-
-		// this.setState({ isLoading: true })
 		const { topic } = this.props
 		const { sort_by, order, page, error } = this.state
 		if (prevProps.topic !== topic || prevState.sort_by !== sort_by || prevState.order !== order || prevState.page !== page) {
@@ -50,9 +53,14 @@ export default class Articles extends Component {
 				})
 				.then((res) => {
 					this.setState({ articles: res.data.articles })
+				}).then(() => {
+					const { articles } = this.state
+					const authorArticles = articles.filter((article) => {
+						return article.author === this.props.author
+					})
+					this.setState({ articlesByAuthor: authorArticles, isLoading: false })
 				})
 				.catch((err) => {
-					console.log('articles did update err', err);
 					this.setState({
 						error: {
 							status: err.status,
@@ -62,13 +70,6 @@ export default class Articles extends Component {
 				})
 		}
 	}
-
-	// sortArticlesByAuthor = (authorName) => {
-	// 	const articlesByAuthor = this.state.articles.filter((article) => {
-	// 		return article.author === authorName
-	// 	})
-	// 	this.setState({ articlesByAuthor: articlesByAuthor, articles: [] })
-	// }
 
 	sortArticles = (event) => {
 		if (event.target.value === "votes" || event.target.value === 'comment_count') {
@@ -85,17 +86,16 @@ export default class Articles extends Component {
 	}
 
 	render() {
-		const { isLoading, error } = this.state
+		const { isLoading, error, articlesByAuthor } = this.state
 		const indexOfLastArticle = this.state.page * this.state.resultsPerPage
 		const indexOfFirstArticle = indexOfLastArticle - this.state.resultsPerPage
-		const currentArticles = this.state.articles.slice(indexOfFirstArticle, indexOfLastArticle)
-		console.log('render articles err', error)
+		const currentArticles = articlesByAuthor.slice(indexOfFirstArticle, indexOfLastArticle)
 		if (error) return <ErrorDisplay {...error} />
 		if (isLoading) return <p>Fetching articles</p>
 
 		return (
 			<div>
-				{!this.props.topic ? <h1 className='topic-article-heading'>All Articles</h1> : <h1 className='topic-article-heading'>{this.state.articles[0].topic[0].toUpperCase() + this.state.articles[0].topic.substr(1)}</h1>}
+				<h1 className='topic-article-heading'>Articles posted by <em>{this.props.author}</em></h1> 
 				<div className="sortBtn-area">
 					<button value="desc" className="sortBtn-btn" onClick={this.sortArticles}>Latest</button>
 					<button value="asc" className="sortBtn-btn" onClick={this.sortArticles}>Oldest</button>
@@ -105,21 +105,15 @@ export default class Articles extends Component {
 				</div>
 				<section className="main-section">
 
-					{/* {this.state.articlesByAuthor.length !== 0 ? this.state.articlesByAuthor.map((article) => {
-						return <ArticleCard key={article.article_id} article={article} sortArticleByAuthor={this.sortArticlesByAuthor} />
-					}) :
-						currentArticles.map((article) => {
-							return <ArticleCard key={article.article_id} article={article} sortArticleByAuthor={this.sortArticlesByAuthor} />
-						})
-
-					} */}
-
 					{currentArticles.map((article) => {
 						return <ArticleCard key={article.article_id} article={article} sortArticleByAuthor={this.sortArticlesByAuthor} />
 					})}
 				</section>
-				<Pagination totalPosts={this.state.articles.length} setPage={this.setPage} page={this.state.page} resultsPerPage={this.state.resultsPerPage} />
+				<Pagination totalPosts={this.state.articlesByAuthor.length} setPage={this.setPage} page={this.state.page} resultsPerPage={this.state.resultsPerPage} />
 			</div>
 		)
 	}
+
 }
+
+export default Author

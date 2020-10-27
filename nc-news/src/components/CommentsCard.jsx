@@ -4,12 +4,14 @@ import axios from 'axios'
 
 class CommentsCard extends Component {
 
-
 	handleChange = (event) => {
 		const commentId = this.props.comment.comment_id
 
 		axios.delete(`https://nc-news-fe-jonp.herokuapp.com/api/comments/${commentId}`).then((res) => {
 			this.props.deleteComments(commentId)
+		}).catch((err) => {
+			console.log('delete comment err', err);
+
 		})
 	}
 
@@ -27,7 +29,6 @@ class CommentsCard extends Component {
 					<button onClick={this.handleChange}
 						className="comments-btn">Delete comment</button> : null
 				}
-
 			</div>
 		)
 	}

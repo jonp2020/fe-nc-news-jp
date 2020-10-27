@@ -1,12 +1,14 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import { Link } from '@reach/router';
+import ErrorDisplay from './ErrorDisplay'
 
 
 export default class Navbar extends Component {
 	state = {
 		topics: [],
 		isLoading: true,
+		error: false
 	}
 
 	componentDidMount = () => {
@@ -17,11 +19,22 @@ export default class Navbar extends Component {
 					topics,
 					isLoading: false,
 				});
-			}).then(() => {
+			}).catch((err) => {
+				console.log('topics err', err);
+				this.setState({
+					error: {
+						status: err.status,
+						message: err.data.msg
+					}
+				})
 			})
 	};
 
 	render() {
+		const { error } = this.state
+		console.log('render navbar err', error)
+		if (error) return <ErrorDisplay {...error} />
+
 		const { topics } = this.state
 		return (
 			<nav className="nav-bar">
