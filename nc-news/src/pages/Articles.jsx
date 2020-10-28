@@ -1,11 +1,46 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import { withStyles, withTheme } from '@material-ui/core/styles';
+import { createMuiTheme } from '@material-ui/core/styles';
+import CircularProgress from '@material-ui/core/CircularProgress';
+
+import PropTypes from 'prop-types';
+import Button from '@material-ui/core/Button';
 import ArticleCard from '../components/ArticleCard'
 import Pagination from '../components/Pagination'
 import ErrorDisplay from '../components/ErrorDisplay'
 // import Navbar from '../components/Navbar'
 
-export default class Articles extends Component {
+const styles = theme => ({
+  root: {
+		// margin: theme.spacing(10,10),
+    // padding: theme.spacing(10, 3),
+	},
+	// sortBtnArea: {
+	// 	margin: theme.spacing(1),
+  //   padding: theme.spacing(2, 3),
+	// 	color: 'white'
+	// },
+	sortArticlesBtn: {
+				margin: theme.spacing(1),
+
+
+	},
+});
+
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: '#083d77',
+    },
+    secondary: {
+      main: '#f44336',
+    },
+  },
+});
+
+class Articles extends Component {
+
 	state = {
 		articles: [],
 		isLoading: true,
@@ -17,7 +52,6 @@ export default class Articles extends Component {
 	}
 
 	componentDidMount = () => {
-		console.log('here in articles did mount')
 		const { error } = this.state
 		const { topic } = this.props
 		axios.get(`https://nc-news-fe-jonp.herokuapp.com/api/articles/`, {
@@ -38,7 +72,6 @@ export default class Articles extends Component {
 	}
 
 	componentDidUpdate = (prevProps, prevState) => {
-		console.log('here in articles did update')
 
 		// this.setState({ isLoading: true })
 		const { topic } = this.props
@@ -51,24 +84,17 @@ export default class Articles extends Component {
 				.then((res) => {
 					this.setState({ articles: res.data.articles })
 				})
-				.catch((err) => {
-					console.log('articles did update err', err);
+				.catch((response) => {
+					console.log('articles did update err', response);
 					this.setState({
 						error: {
-							status: err.status,
-							message: err.data.msg
+							status: response.status,
+							message: response.data.msg
 						}
 					})
 				})
 		}
 	}
-
-	// sortArticlesByAuthor = (authorName) => {
-	// 	const articlesByAuthor = this.state.articles.filter((article) => {
-	// 		return article.author === authorName
-	// 	})
-	// 	this.setState({ articlesByAuthor: articlesByAuthor, articles: [] })
-	// }
 
 	sortArticles = (event) => {
 		if (event.target.value === "votes" || event.target.value === 'comment_count') {
@@ -85,13 +111,17 @@ export default class Articles extends Component {
 	}
 
 	render() {
+		const { classes } = this.props;
+
 		const { isLoading, error } = this.state
 		const indexOfLastArticle = this.state.page * this.state.resultsPerPage
 		const indexOfFirstArticle = indexOfLastArticle - this.state.resultsPerPage
 		const currentArticles = this.state.articles.slice(indexOfFirstArticle, indexOfLastArticle)
 		console.log('render articles err', error)
 		if (error) return <ErrorDisplay {...error} />
-		if (isLoading) return <p>Fetching articles</p>
+		if (isLoading) return <CircularProgress />
+
+		// <p>Fetching articles</p>
 
 		return (
 			<div>
@@ -104,16 +134,6 @@ export default class Articles extends Component {
 
 				</div>
 				<section className="main-section">
-
-					{/* {this.state.articlesByAuthor.length !== 0 ? this.state.articlesByAuthor.map((article) => {
-						return <ArticleCard key={article.article_id} article={article} sortArticleByAuthor={this.sortArticlesByAuthor} />
-					}) :
-						currentArticles.map((article) => {
-							return <ArticleCard key={article.article_id} article={article} sortArticleByAuthor={this.sortArticlesByAuthor} />
-						})
-
-					} */}
-
 					{currentArticles.map((article) => {
 						return <ArticleCard key={article.article_id} article={article} sortArticleByAuthor={this.sortArticlesByAuthor} />
 					})}
@@ -123,3 +143,11 @@ export default class Articles extends Component {
 		)
 	}
 }
+
+
+Articles.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(Articles);
+

@@ -33,7 +33,6 @@ class Author extends Component {
 				this.setState({ articlesByAuthor: authorArticles, isLoading: false })
 			})
 			.catch(({ response }) => {
-				console.log('articles did mount err', response)
 				this.setState({
 					error: {
 						status: response.status,
@@ -86,6 +85,8 @@ class Author extends Component {
 	}
 
 	render() {
+		console.log('rendering in author')
+
 		const { isLoading, error, articlesByAuthor } = this.state
 		const indexOfLastArticle = this.state.page * this.state.resultsPerPage
 		const indexOfFirstArticle = indexOfLastArticle - this.state.resultsPerPage

@@ -1,10 +1,26 @@
 import axios from 'axios'
 import React, { Component } from 'react'
+import { withStyles } from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
 
-export default class CommentsBox extends Component {
+const styles = theme => ({
+  textBox: {
+    // background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+    // border: 0,
+    // borderRadius: 3,
+    // color: 'white',
+    // height: 48,
+    // padding: '0 30px',
+  },
+});
+
+class CommentsBox extends Component {
 	state = {
 		commentsText: '',
 	}
+
 
 	handleChange = (event) => {
 		const text = event.target.value
@@ -27,18 +43,34 @@ export default class CommentsBox extends Component {
 				this.setState({ commentsText: '' })
 
 				this.props.addComments(res.data)
-			}).catch((err) => {
-				console.log('err', err);
+			}).catch((response) => {
+				this.setState({
+					error: {
+						status: response.status,
+						message: response.data.msg
+					}
+				})
 			})
 	}
 
 	render() {
+		console.log('props', this.props);
+		const { classes } = this.props;
+
 		return (
 			<div className="comments-box">
-				<textarea value={this.state.commentsText} onChange={this.handleChange}></textarea>
-				<button disabled={this.state.commentsText.length === 0} onClick={this.handleSubmit} className="comments-btn">Add Comment</button>
+			  <TextField className={classes.textBox} id="filled-basic" label="Add a comment" variant="filled" value={this.state.commentsText} onChange={this.handleChange}/>
+
+				{/* <textarea value={this.state.commentsText} onChange={this.handleChange}></textarea> */}
+				<Button variant="contained" size="small" disabled={this.state.commentsText.length === 0} onClick={this.handleSubmit} className="comments-btn">Post</Button>
 			</div>
 
 		)
 	}
 }
+
+CommentsBox.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(CommentsBox);

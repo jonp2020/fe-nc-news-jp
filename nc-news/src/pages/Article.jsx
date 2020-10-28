@@ -77,6 +77,8 @@ class Article extends Component {
 	}
 
 	render() {
+		console.log('rendering in single article')
+
 		const { error } = this.state
 		if (error) return <ErrorDisplay {...error} />
 		if (this.state.isLoading) return <p>Getting you the article</p>

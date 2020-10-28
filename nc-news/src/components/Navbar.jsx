@@ -31,6 +31,8 @@ export default class Navbar extends Component {
 	};
 
 	render() {
+		console.log('rendering in navbar')
+
 		const { error } = this.state
 		console.log('render navbar err', error)
 		if (error) return <ErrorDisplay {...error} />

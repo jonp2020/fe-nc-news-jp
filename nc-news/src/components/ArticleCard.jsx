@@ -10,14 +10,13 @@ const ArticleCard = (props) => {
 
 	return (
 		<article className='article-card'>
-			<Link to={`/articles/${newArticle.article_id}`}>
+			<Link className="article-title" to={`/articles/${newArticle.article_id}`}>
 				<h3 className="article-title">{newArticle.title}</h3>
 			</Link>
-			{/* <p className="article-date">Posted by  <button onClick={() => props.sortArticleByAuthor(newArticle.author)}>{newArticle.author}</button> on {updatedDate.toDateString()} at {updatedTime}</p> */}
-			<p className="article-date">Posted by  <Link to={`/author/${newArticle.author}`}><strong><em>{newArticle.author}</em></strong></Link> on {updatedDate.toDateString()} at {updatedTime}</p>
+			<p className="article-date-comments">Posted by  <Link className="article-author" to={`/author/${newArticle.author}`}><strong><em>{newArticle.author}</em></strong></Link> on {updatedDate.toDateString()} at {updatedTime}</p>
 			<p className="article-body">{splicedArticleBody}...</p>
-			<p>{newArticle.comment_count} Comments</p>
-			<Link to={`/articles/${newArticle.article_id}`}>
+			<p className="article-date-comments">{newArticle.comment_count} Comments</p>
+			<Link className="article-read-more" to={`/articles/${newArticle.article_id}`}>
 				<p className="article-read-more">Read more...</p>
 			</Link>
 			<VoteButton votes={props.article.votes} idNum={props.article.article_id} articlesOrComments="articles" />

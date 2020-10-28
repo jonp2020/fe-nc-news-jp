@@ -10,7 +10,7 @@ const Pagination = (props) => {
 	return (
 		<section className="pagination-container">
 			<button disabled={atStart} className="paginate-btn" onClick={() => props.setPage(props.page - 1)}>{'<'}</button>
-			<p className="paginate-btn">Page {props.page} of {pageCount}</p>
+			<p className="paginate-page-text">Page {props.page} of {pageCount}</p>
 			<button disabled={atEnd} className="paginate-btn" onClick={() => props.setPage(props.page + 1)}> {'>'}</button>
 		</section>
 	)
