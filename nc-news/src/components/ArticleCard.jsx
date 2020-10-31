@@ -9,7 +9,9 @@ const ArticleCard = (props) => {
 	const updatedTime = newArticle.created_at.slice(11, 16)
 
 	return (
-		<article className='article-card'>
+		<article className="article-container">
+		{/* <div className="article-container-2"> */}
+			<div className='article-container-content'>
 			<Link className="article-title" to={`/articles/${newArticle.article_id}`}>
 				<h3 className="article-title">{newArticle.title}</h3>
 			</Link>
@@ -19,7 +21,11 @@ const ArticleCard = (props) => {
 			<Link className="article-read-more" to={`/articles/${newArticle.article_id}`}>
 				<p className="article-read-more">Read more...</p>
 			</Link>
+			</div>
+			<div className="article-card-voteBtn">
 			<VoteButton votes={props.article.votes} idNum={props.article.article_id} articlesOrComments="articles" />
+			</div>
+			{/* </div> */}
 		</article>
 	)
 }

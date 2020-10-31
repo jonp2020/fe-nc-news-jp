@@ -3,6 +3,7 @@ import axios from 'axios'
 import ArticleCard from '../components/ArticleCard'
 import Pagination from '../components/Pagination'
 import ErrorDisplay from '../components/ErrorDisplay'
+import LoaderPage from './Loader'
 
 class Author extends Component {
 	state = {
@@ -17,8 +18,6 @@ class Author extends Component {
 	}
 
 	componentDidMount = () => {
-		console.log('here in articles did mount')
-		const { error } = this.state
 		const { topic } = this.props
 		axios.get(`https://nc-news-fe-jonp.herokuapp.com/api/articles/`, {
 			params: { topic }
@@ -44,7 +43,7 @@ class Author extends Component {
 
 	componentDidUpdate = (prevProps, prevState) => {
 		const { topic } = this.props
-		const { sort_by, order, page, error } = this.state
+		const { sort_by, order, page, } = this.state
 		if (prevProps.topic !== topic || prevState.sort_by !== sort_by || prevState.order !== order || prevState.page !== page) {
 			axios
 				.get(`https://nc-news-fe-jonp.herokuapp.com/api/articles/`, {
@@ -85,14 +84,12 @@ class Author extends Component {
 	}
 
 	render() {
-		console.log('rendering in author')
-
 		const { isLoading, error, articlesByAuthor } = this.state
 		const indexOfLastArticle = this.state.page * this.state.resultsPerPage
 		const indexOfFirstArticle = indexOfLastArticle - this.state.resultsPerPage
 		const currentArticles = articlesByAuthor.slice(indexOfFirstArticle, indexOfLastArticle)
 		if (error) return <ErrorDisplay {...error} />
-		if (isLoading) return <p>Fetching articles</p>
+		if (isLoading) return <LoaderPage />
 
 		return (
 			<div>

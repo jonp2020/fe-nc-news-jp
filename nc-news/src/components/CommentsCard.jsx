@@ -1,26 +1,18 @@
 import React, { Component } from 'react'
 import VoteButton from './VoteButton'
 import axios from 'axios'
-import ErrorDisplay from '../components/ErrorDisplay'
-
+import { Link } from '@reach/router';
 
 class CommentsCard extends Component {
-
 	state = {
 		error: false
 	} 
 
 	handleChange = (event) => {
 		const commentId = this.props.comment.comment_id
-
 		axios.delete(`https://nc-news-fe-jonp.herokuapp.com/api/comments/${commentId}`).then((res) => {
 			this.props.deleteComments(commentId)
 		}).catch((response) => {
-			console.log('delete comment response', response);
-			console.log('delete comment response status', response.status);
-			console.log('delete comment response data', response.data);
-
-
 			this.setState({
 				error: {
 					status: 404,
@@ -40,21 +32,23 @@ class CommentsCard extends Component {
 		)}
 		const newComment = { ...this.props.comment }
 		const updatedDate = new Date(newComment.created_at)
-		const updatedTime = newComment.created_at.slice(11, 1)
+		const updatedTime = newComment.created_at.slice(11, 16)
 		return (
-			<div className="comments-body">
-				<p>{this.props.comment.body}</p>
-				<p>Posted on {updatedDate.toDateString()} at {updatedTime} by {this.props.comment.author}</p>
-				<VoteButton votes={this.props.comment.votes} idNum={this.props.comment.comment_id} articlesOrComments="comments" />
-
-				{this.props.username === this.props.comment.author ?
+			<div className="comments-body-container">
+				<div className="comment-content">
+					<p>{this.props.comment.body}</p>
+					<p className="article-date-comments">Posted by  <Link className="article-author" to={`/author/${this.props.comment.author}`}><strong><em>{this.props.comment.author}</em></strong></Link> on {updatedDate.toDateString()} at {updatedTime}</p>
+					{this.props.username === this.props.comment.author ?
 					<button onClick={this.handleChange}
 						className="comments-btn">Delete comment</button> : null
-				}
+					}
+				</div>
+				<div className="comment-vote-btn">
+					<VoteButton votes={this.props.comment.votes} idNum={this.props.comment.comment_id} articlesOrComments="comments" />
+					</div>
 			</div>
 		)
 	}
-
 }
 
 export default CommentsCard; 

@@ -5,16 +5,16 @@ const ErrorDisplay = (props) => {
 
 	if (props.path === "/*") {
 		return (
-			<div>
+			<div className="error-msg">
 				<p>Status: 404.</p>
 				<p>Please check the URL you typed. </p>
 			</div>
 		)
 	} else {
 		return (
-			<div>
+			<div className="error-msg">
 				<h3>
-					Sorry we haven't been able to find the topic or article you are looking for.
+					Sorry, we haven't been able to find the topic or article you are looking for.
 				</h3>
 				<h4>Please check whether you have typed the URL correctly.</h4>
 

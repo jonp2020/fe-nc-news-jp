@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import { Link } from '@reach/router';
 import CommentsCard from '../components/CommentsCard'
 import VoteButton from '../components/VoteButton'
 import CommentsBox from '../components/CommentsBox'
 import Pagination from '../components/Pagination'
 import ErrorDisplay from '../components/ErrorDisplay'
+import LoaderPage from './Loader'
 
 class Article extends Component {
 	state = {
@@ -19,7 +21,6 @@ class Article extends Component {
 	}
 
 	componentDidMount = () => {
-		// this.setState({ isLoading: true })
 		axios.get(`https://nc-news-fe-jonp.herokuapp.com/api/articles/${this.props.article_id}`).then((res) => {
 			this.setState({ article: res.data.article })
 		}).then(() => {
@@ -27,7 +28,6 @@ class Article extends Component {
 				this.setState({ comments: res.data.comments, isLoading: false })
 			})
 		}).catch(({ response }) => {
-			console.log('single article did mount err', response);
 			this.setState({
 				error: {
 					status: response.status,
@@ -46,7 +46,6 @@ class Article extends Component {
 					this.setState({ comments: res.data.comments, isLoading: false })
 				})
 			}).catch(({ response }) => {
-				console.log('single article did update err', response);
 				this.setState({
 					error: {
 						status: response.status,
@@ -77,29 +76,32 @@ class Article extends Component {
 	}
 
 	render() {
-		console.log('rendering in single article')
-
 		const { error } = this.state
 		if (error) return <ErrorDisplay {...error} />
-		if (this.state.isLoading) return <p>Getting you the article</p>
+		if (this.state.isLoading) return <LoaderPage />
 		const updatedDate = new Date(this.state.article.created_at)
 		const updatedTime = this.state.article.created_at.slice(11, 16)
-
 		const indexOfLastComment = this.state.page * this.state.resultsPerPage
 		const indexOfFirstComment = indexOfLastComment - this.state.resultsPerPage
 		const currentComments = this.state.comments.slice(indexOfFirstComment, indexOfLastComment)
 
 		return (
-
-			<div>
-				<article className='article-card'>
-					<h3 className="article-title">{this.state.article.title}</h3>
-					<p className="article-date">Posted by {this.state.article.author} on {updatedDate.toDateString()} at {updatedTime}</p>
-					<p className="article-body">{this.state.article.body}</p>
-					<p>{this.state.article.comment_count} Comments</p>
+			<div className="article-and-comments">
+				<article className="single-article-container">
+					<div className="article-container-content">
+						<h3 className="article-title-single">{this.state.article.title}</h3>
+						<p className="article-date-comments">Posted by  <Link className="article-author" to={`/author/${this.state.article.author}`}><strong><em>{this.state.article.author}</em></strong></Link> on {updatedDate.toDateString()} at {updatedTime}</p>
+						<p className="article-body">{this.state.article.body}</p>
+						<p className="article-date-comments">{this.state.article.comment_count} Comments</p>
+					</div>
+					<div className="article-card-voteBtn">
 					<VoteButton votes={this.state.article.votes} idNum={this.state.article.article_id} articlesOrComments="articles" />
+					</div>
 				</article>
+
+				<div className="comments-box">
 				<CommentsBox loggedInStatus={this.props.loggedInStatus} username={this.props.username} articleId={this.state.article.article_id} addComments={this.addComments} />
+				</div>
 				<div className="comments-section">
 					{currentComments.map((comment) => {
 						return <CommentsCard username={this.props.username} key={comment.comment_id} comment={comment} deleteComments={this.deleteComments} />

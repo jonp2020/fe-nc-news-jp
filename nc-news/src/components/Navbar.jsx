@@ -2,13 +2,16 @@ import React, { Component } from 'react'
 import axios from 'axios'
 import { Link } from '@reach/router';
 import ErrorDisplay from './ErrorDisplay'
-
+import { FaHome } from 'react-icons/fa'
 
 export default class Navbar extends Component {
 	state = {
 		topics: [],
+		slug: '',
 		isLoading: true,
-		error: false
+		error: false,
+		colorOn: 'blue',
+		colorOff: 'yellow'
 	}
 
 	componentDidMount = () => {
@@ -20,7 +23,6 @@ export default class Navbar extends Component {
 					isLoading: false,
 				});
 			}).catch((err) => {
-				console.log('topics err', err);
 				this.setState({
 					error: {
 						status: err.status,
@@ -30,24 +32,31 @@ export default class Navbar extends Component {
 			})
 	};
 
-	render() {
-		console.log('rendering in navbar')
+	handleChange = (passedValue) => {
+		const topicListElements = document.getElementsByClassName('topics-navbar-list-array')
+		for (let i = 0; i < topicListElements.length; i++){
+			if(topicListElements[i].id === passedValue){
+				topicListElements[i].classList.add("topics-navbar-list-selected")
+			} else topicListElements[i].classList.remove("topics-navbar-list-selected")
+		}
+	}
 
+	render() {
 		const { error } = this.state
-		console.log('render navbar err', error)
 		if (error) return <ErrorDisplay {...error} />
 
 		const { topics } = this.state
 		return (
 			<nav className="nav-bar">
 				<ul className="topics-nav-menu">
-					<li className="topics-navbar-list"><Link className="topics-navbar-list" to={`/articles`}>Front Page</Link> </li>
+					<li  className="topics-navbar-list" value="front_page" title="Front page"><Link className="topics-navbar-list-array" id="front-page" onClick={() => this.handleChange('front-page')}  to={`/articles`} value="front_page"><FaHome /></Link> </li>
 					{topics.map((topic) => {
-						return <li className="topics-navbar-list" key={topic.slug}><Link to={`/topics/${topic.slug}`} className="topics-navbar-list"
+						const topicSlug = topic.slug
+						return <li className="topics-navbar-list" key={topic.slug}   onClick={() => this.handleChange(topicSlug)} title={topic.slug}
+						><Link id={topic.slug} to={`/topics/${topic.slug}`} className="topics-navbar-list-array" 
 						>{topic.slug}</Link></li>
 					})}
 				</ul>
-
 			</nav>
 		)
 	}
