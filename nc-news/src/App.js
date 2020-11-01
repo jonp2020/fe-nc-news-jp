@@ -39,7 +39,6 @@ export default class App extends Component {
 				<Navbar />
 				<div className="central-area">
 					<Router primary={false}>
-
 						<Home path="/" />
 						<Articles loggedInStatus={this.state.loggedInStatus} username={this.state.username} path="/articles" />
 						<Article loggedInStatus={this.state.loggedInStatus} username={this.state.username} path="/articles/:article_id" />

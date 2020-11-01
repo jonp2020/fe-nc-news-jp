@@ -73,6 +73,7 @@ class Article extends Component {
 
 	setPage = (newPage) => {
 		this.setState({ page: newPage })
+		window.scrollTo(0, 0)
 	}
 
 	render() {
@@ -103,6 +104,8 @@ class Article extends Component {
 				<CommentsBox loggedInStatus={this.props.loggedInStatus} username={this.props.username} articleId={this.state.article.article_id} addComments={this.addComments} />
 				</div>
 				<div className="comments-section">
+				{this.state.comments.length === 0 ? <p className="add-comments-text">Be the first to write a comment</p> : <p className="add-comments-text">Comments</p>}
+				<Pagination totalPosts={this.state.comments.length} setPage={this.setPage} page={this.state.page} resultsPerPage={this.state.resultsPerPage} />
 					{currentComments.map((comment) => {
 						return <CommentsCard username={this.props.username} key={comment.comment_id} comment={comment} deleteComments={this.deleteComments} />
 					})}

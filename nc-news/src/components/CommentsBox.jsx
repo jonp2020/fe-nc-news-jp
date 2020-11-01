@@ -7,6 +7,9 @@ import TextField from '@material-ui/core/TextField';
 const styles = theme => ({
   textBox: {
 		width: 650,
+		'@media (max-width:420px)': {
+			width: 300,
+		}
   },
 });
 

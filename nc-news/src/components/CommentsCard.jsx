@@ -36,7 +36,7 @@ class CommentsCard extends Component {
 		return (
 			<div className="comments-body-container">
 				<div className="comment-content">
-					<p>{this.props.comment.body}</p>
+					<p className="comment-body">{this.props.comment.body}</p>
 					<p className="article-date-comments">Posted by  <Link className="article-author" to={`/author/${this.props.comment.author}`}><strong><em>{this.props.comment.author}</em></strong></Link> on {updatedDate.toDateString()} at {updatedTime}</p>
 					{this.props.username === this.props.comment.author ?
 					<button onClick={this.handleChange}

@@ -46,6 +46,7 @@ class Articles extends Component {
 	}
 
 	componentDidUpdate = (prevProps, prevState) => {
+
 		const { topic } = this.props
 		const { sort_by, order, page } = this.state
 		if (prevProps.topic !== topic || prevState.sort_by !== sort_by || prevState.order !== order || prevState.page !== page) {
@@ -89,6 +90,7 @@ class Articles extends Component {
 
 	setPage = (newPage) => {
 		this.setState({ page: newPage })
+		window.scrollTo(0, 0)
 	}
 
 	render() {
@@ -100,9 +102,11 @@ class Articles extends Component {
 		if (isLoading) return <LoaderPage />
 	
 		return (
-			<div>
+			<div className="articles-container">
 				{!this.props.topic ? <h1 className='topic-article-heading'>All Articles</h1> : <h1 className='topic-article-heading'>{this.state.articles[0].topic[0].toUpperCase() + this.state.articles[0].topic.substr(1)}</h1>}
-				<div className="sortBtn-area">
+				<Pagination totalPosts={this.state.articles.length} setPage={this.setPage} page={this.state.page} resultsPerPage={this.state.resultsPerPage} />
+
+				<div className="sortBtn-container">
 					<button value="desc" className="sortBtn-btn" onClick={this.sortArticles}>Latest</button>
 					<button value="asc" className="sortBtn-btn" onClick={this.sortArticles}>Oldest</button>
 					<button value="comment_count" className="sortBtn-btn" onClick={this.sortArticles}>Most commented</button>
